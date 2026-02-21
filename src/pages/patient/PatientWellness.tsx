@@ -37,6 +37,7 @@ export const PatientWellness: React.FC = () => {
   const [showSupport, setShowSupport] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputMessage, setInputMessage] = useState('');
+  const [isSpeaking, setIsSpeaking] = useState(false);
   const [showChat, setShowChat] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -45,9 +46,15 @@ export const PatientWellness: React.FC = () => {
       const analysis = analyzeWellness();
       setIsAnalyzing(false);
       
-      if (analysis) {
-        const hasIssues = (analysis as any).flags?.stress || (analysis as any).flags?.sadness || (analysis as any).flags?.loneliness || (analysis as any).flags?.confusion;
-        setShowSupport(hasIssues);
+      if (analysis && typeof analysis === 'object') {
+        const anyAnalysis = analysis as Record<string, unknown>;
+        const hasIssues = anyAnalysis.flags && (
+          (anyAnalysis.flags as Record<string, boolean>).stress || 
+          (anyAnalysis.flags as Record<string, boolean>).sadness || 
+          (anyAnalysis.flags as Record<string, boolean>).loneliness || 
+          (anyAnalysis.flags as Record<string, boolean>).confusion
+        );
+        setShowSupport(!!hasIssues);
         startConversation(analysis);
       }
     }, 1500);

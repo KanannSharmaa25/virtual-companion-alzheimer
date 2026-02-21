@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
-import { MapPin, Shield, Lock, AlertCircle, CheckCircle } from 'lucide-react';
+import { MapPin, Lock, AlertCircle, CheckCircle } from 'lucide-react';
 import { useData, useUser } from '../../context/AppContext';
 import { PasswordModal } from '../../components/PasswordModal';
 import './PatientHome.css';
 
 export const PatientLocation: React.FC = () => {
   const { safeZones, familyMembers, locationSharing, setLocationSharing } = useData();
-  const { verifyCaregiverPassword } = useUser();
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [pendingToggle, setPendingToggle] = useState<boolean | null>(null);
   const [error, setError] = useState('');
