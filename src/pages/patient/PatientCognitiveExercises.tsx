@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Brain, Play, CheckCircle, RefreshCw, Clock, Trophy, Star, ChevronRight, Grid, ArrowRight } from 'lucide-react';
 import { useData } from '../../context/AppContext';
 import './PatientCognitiveExercises.css';
@@ -8,6 +8,15 @@ interface Exercise {
   type: string;
   name: string;
   description: string;
+}
+
+interface Question {
+  id: string;
+  question: string;
+  correctAnswer: string;
+  image?: string;
+  options?: string[];
+}
   icon: React.ReactNode;
   color: string;
 }
@@ -123,12 +132,12 @@ export const PatientCognitiveExercises: React.FC = () => {
     ? Math.round(todayResults.reduce((acc, r) => acc + (r.score / r.totalQuestions) * 100, 0) / todayResults.length)
     : 0;
 
-  const getQuestions = (type: string) => {
+  const getQuestions = (type: string): Question[] => {
     switch(type) {
-      case 'identify_objects': return OBJECT_QUESTIONS;
-      case 'recall_names': return NAME_QUESTIONS;
-      case 'sequence_memory': return SEQUENCE_QUESTIONS;
-      case 'word_recall': return WORD_QUESTIONS;
+      case 'identify_objects': return OBJECT_QUESTIONS as Question[];
+      case 'recall_names': return NAME_QUESTIONS as Question[];
+      case 'sequence_memory': return SEQUENCE_QUESTIONS as Question[];
+      case 'word_recall': return WORD_QUESTIONS as Question[];
       default: return [];
     }
   };

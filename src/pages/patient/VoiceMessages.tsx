@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Mic, Square, Play, Pause, Trash2, Volume2, User, Video, Camera, X, Clock, AlertCircle } from 'lucide-react';
+import { Mic, Square, Play, Pause, Trash2, Volume2, User, Video, X } from 'lucide-react';
 import { useUser, useData } from '../../context/AppContext';
 import '../../styles/voice.css';
 

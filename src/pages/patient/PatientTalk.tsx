@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { Mic, Send, Heart, Volume2, Sparkles, Music, Image, Calendar, Brain, BookOpen, Activity, Coffee, Sun, Moon, Star, X, RotateCcw, Copy, Check } from 'lucide-react';
+import { Mic, Send, Heart, Volume2, Sparkles, Music, Image, Calendar, Brain, BookOpen, Copy, Check } from 'lucide-react';
 import { useData } from '../../context/AppContext';
 import './Talk.css';
 
@@ -519,7 +519,7 @@ const extractKeywords = (text: string): string[] => {
 };
 
 export const PatientTalk: React.FC = () => {
-  const { journalEntries, cognitiveResults, musicMemories, familyMembers, reminders, voiceMessages } = useData();
+  const { journalEntries, cognitiveResults, musicMemories, familyMembers, reminders } = useData();
   
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputText, setInputText] = useState('');

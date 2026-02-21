@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { MapPin, Shield, Clock, Battery, Activity, AlertTriangle, RefreshCw, UserPlus, Footprints, Zap, Pill, MessageCircle, Image, Mic, Brain, TrendingUp } from 'lucide-react';
+import { MapPin, Shield, Battery, Activity, AlertTriangle, UserPlus, Footprints, Pill, MessageCircle, Image, Mic, Brain, TrendingUp } from 'lucide-react';
 import { useData } from '../../context/AppContext';
 import './CaregiverDashboard.css';
 
@@ -23,7 +23,6 @@ export const CaregiverDashboard: React.FC = () => {
     weeklyReport
   } = useData();
   
-  const enabledSafeZone = safeZones.find(z => z.enabled);
   const unacknowledgedFalls = fallAlerts.filter(f => !f.acknowledged);
   const lowBattery = patientBattery.level < 20;
 

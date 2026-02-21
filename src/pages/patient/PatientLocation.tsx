@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { MapPin, Shield, Users, Lock, AlertCircle, CheckCircle } from 'lucide-react';
+import { MapPin, Shield, Lock, AlertCircle, CheckCircle } from 'lucide-react';
 import { useData, useUser } from '../../context/AppContext';
 import { PasswordModal } from '../../components/PasswordModal';
 import './PatientHome.css';
@@ -29,10 +29,6 @@ export const PatientLocation: React.FC = () => {
     setShowPasswordModal(false);
     setPendingToggle(null);
     setError('');
-  };
-
-  const handlePasswordError = () => {
-    setError('Incorrect password. Please try again.');
   };
 
   return (

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { Heart, MessageCircle, Sparkles, Phone, Users, Music, BookOpen, Brain, Activity, Coffee, Sun, Moon, Star, Send, Volume2, RefreshCw, ArrowRight } from 'lucide-react';
-import { useUser, useData } from '../../context/AppContext';
+import { Heart, MessageCircle, Users, Music, BookOpen, Brain, Activity, Sun, Moon, Star, Send, Volume2, RefreshCw } from 'lucide-react';
+import { useData } from '../../context/AppContext';
 
 const MOOD_ICONS: Record<string, React.ReactNode> = {
   happy: <Sun size={32} />,
@@ -31,14 +31,12 @@ interface Message {
 }
 
 export const PatientWellness: React.FC = () => {
-  const { user } = useUser();
   const { moodAnalysis, analyzeWellness, journalEntries, cognitiveResults, musicMemories, familyMembers, chatMessages, voiceMessages } = useData();
   
   const [isAnalyzing, setIsAnalyzing] = useState(true);
   const [showSupport, setShowSupport] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputMessage, setInputMessage] = useState('');
-  const [isSpeaking, setIsSpeaking] = useState(false);
   const [showChat, setShowChat] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -48,7 +46,8 @@ export const PatientWellness: React.FC = () => {
       setIsAnalyzing(false);
       
       if (analysis) {
-        setShowSupport(analysis.flags.stress || analysis.flags.sadness || analysis.flags.loneliness || analysis.flags.confusion);
+        const hasIssues = (analysis as any).flags?.stress || (analysis as any).flags?.sadness || (analysis as any).flags?.loneliness || (analysis as any).flags?.confusion;
+        setShowSupport(hasIssues);
         startConversation(analysis);
       }
     }, 1500);

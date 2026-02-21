@@ -134,7 +134,7 @@ export const CaregiverSettings: React.FC = () => {
           });
           alert('Location updated! Distance alerts will now be based on your current position.');
         },
-        (error) => {
+        () => {
           alert('Unable to get location. Please enable location services.');
         }
       );

@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { MapPin, RefreshCw, Clock, UserPlus, Battery, Zap, Shield, AlertTriangle } from 'lucide-react';
+import React from 'react';
+import { MapPin, RefreshCw, Clock, UserPlus, Battery } from 'lucide-react';
 import { useData } from '../../context/AppContext';
 import './CaregiverLocation.css';
 

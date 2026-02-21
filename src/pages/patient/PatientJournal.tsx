@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Mic, Square, Play, Pause, Trash2, Volume2, Sparkles, BookOpen, Calendar, ChevronDown, ChevronUp, Heart, Smile, Meh, Frown, Star } from 'lucide-react';
-import { useUser, useData } from '../../context/AppContext';
+import { useData } from '../../context/AppContext';
 import '../../styles/voice.css';
 
 const JOURNAL_PROMPTS = {
@@ -85,7 +85,6 @@ const MOODS = [
 ];
 
 export const PatientJournal: React.FC = () => {
-  const { user } = useUser();
   const { journalEntries, addJournalEntry, removeJournalEntry } = useData();
   
   const [content, setContent] = useState('');

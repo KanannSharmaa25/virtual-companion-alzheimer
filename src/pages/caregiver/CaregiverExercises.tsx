@@ -1,5 +1,5 @@
 import React from 'react';
-import { Brain, Trophy, Clock, Calendar, TrendingUp, BarChart3, Star, Users } from 'lucide-react';
+import { Brain, Trophy, Calendar, TrendingUp, BarChart3, Star } from 'lucide-react';
 import { useData } from '../../context/AppContext';
 
 export const CaregiverExercises: React.FC = () => {
@@ -10,7 +10,6 @@ export const CaregiverExercises: React.FC = () => {
   };
 
   const todayResults = cognitiveResults.filter(r => r.date === getTodayDate());
-  const weeklyResults = cognitiveResults.slice(-7);
   
   const totalExercises = cognitiveResults.length;
   const averageScore = totalExercises > 0 
@@ -25,11 +24,6 @@ export const CaregiverExercises: React.FC = () => {
     const totalAttempts = results.length;
     return { type, avgScore, totalAttempts };
   });
-
-  const formatDate = (dateStr: string) => {
-    const date = new Date(dateStr);
-    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-  };
 
   return (
     <div className="page-container">
