@@ -1,73 +1,140 @@
-# React + TypeScript + Vite
+🧠 Virtual Companion for Alzheimer’s Patients
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+An AI-powered, role-based healthcare application designed to assist Alzheimer’s patients with daily routines, safety, and emotional support, while enabling caregivers and family members to monitor patient activity, location, and health insights in real time.
 
-Currently, two official plugins are available:
+📌 Project Description
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+The Virtual Companion for Alzheimer’s Patients bridges the gap between traditional ICT-based care systems and intelligent, AI-driven daily assistance. The application is designed with a strong focus on patient safety, caregiver control, and calm, accessible UI/UX suitable for individuals with cognitive impairment.
 
-## React Compiler
+The system supports two user roles—Patient and Caregiver—and dynamically adapts features based on the selected role. Once a user logs in, the app remembers their role and profile, ensuring a smooth and stress-free experience during subsequent sessions.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+👥 User Roles
+👴 Patient
 
-## Expanding the ESLint configuration
+Interacts with a simplified, panic-safe interface
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+Receives daily assistance and reminders
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+Uses emergency SOS without restrictions
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+Cannot modify critical settings without caregiver approval
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+👩‍⚕️ Caregiver / Family Member
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Monitors patient safety and activity
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+Controls permissions, alerts, and sensitive settings
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+Receives real-time notifications and weekly reports
+
+✨ Key Features
+🧠 Assistance & Support
+
+AI-based conversational companion
+
+Smart reminders for medication and routines
+
+Orientation support (date, time, location)
+
+Emotion-aware, calming interactions
+
+📍 Safety & Monitoring
+
+Live location tracking
+
+Safe zone (geofencing) with adjustable radius
+
+Distance-based alerts
+
+Indoor movement and inactivity detection
+
+Fall detection using device sensors
+
+📊 Insights & Analytics
+
+Weekly movement pattern reports
+
+Activity summaries and behavior trends
+
+Medication adherence overview
+
+🔐 Security & Restrictions
+
+Role-based access control
+
+Caregiver-only PIN/password for critical actions
+
+Patient-safe restrictions to prevent accidental changes
+
+Persistent login with automatic dashboard redirection
+
+🧭 Application Flow
+
+Full-screen landing page introduces the application
+
+User logs in or signs up
+
+First-time users choose their role (Patient or Caregiver)
+
+Profile details are collected based on role
+
+Subsequent logins directly open the respective dashboard
+
+⚙️ Tech Stack
+
+This project is built using the React + TypeScript + Vite template.
+
+Frontend
+
+React
+
+TypeScript
+
+Vite (fast build and hot module replacement)
+
+Tooling
+
+ESLint for code quality
+
+Modular, scalable folder structure
+
+🚀 Getting Started
+Install Dependencies
+npm install
+Run Development Server
+npm run dev
+🧩 Template Information
+
+This project uses the official React + TypeScript + Vite template, which provides:
+
+Minimal and fast setup
+
+Hot Module Replacement (HMR)
+
+ESLint configuration
+
+Support for Babel or SWC-based Fast Refresh
+
+The React Compiler is not enabled by default due to its impact on development and build performance but can be added later if required.
+
+🎓 Academic Relevance
+
+This project demonstrates concepts from:
+
+Artificial Intelligence
+
+Healthcare Informatics
+
+Human-Centered UI/UX Design
+
+Role-Based System Architecture
+
+Safety-Critical Application Design
+
+It is suitable as a minor project and can be extended into a major project or research-based healthcare system.
+
+👤 Author
+
+Kanan
+Computer Science & Data Science Student
+Focused on AI-driven healthcare solutions and real-world problem solving.
