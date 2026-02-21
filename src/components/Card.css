@@ -1,0 +1,21 @@
+.card {
+  background-color: #FFFFFF;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.card-highlight {
+  border-left: 4px solid #4CAF50;
+}
+
+.card-alert {
+  border-left: 4px solid #FF6B6B;
+}
+
+.card-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #2E3A3A;
+  margin-bottom: 16px;
+}

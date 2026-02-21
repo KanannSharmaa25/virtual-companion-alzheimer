@@ -1,0 +1,77 @@
+.sos-container {
+  background: white;
+  border-radius: 24px;
+  padding: 48px;
+  text-align: center;
+  border: 1px solid var(--border);
+  margin-bottom: 24px;
+}
+
+.sos-icon-large {
+  margin-bottom: 24px;
+}
+
+.sos-container h2 {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 12px;
+}
+
+.sos-description {
+  font-size: 15px;
+  color: var(--text-secondary);
+  max-width: 400px;
+  margin: 0 auto 32px;
+  line-height: 1.6;
+}
+
+.sos-button-large {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 48px 64px;
+  background: linear-gradient(135deg, #EF4444, #DC2626);
+  border-radius: 24px;
+  color: white;
+  font-size: 20px;
+  font-weight: 700;
+  transition: all 0.3s ease;
+  box-shadow: 0 10px 30px rgba(239, 68, 68, 0.3);
+}
+
+.sos-button-large:hover {
+  transform: scale(1.05);
+  box-shadow: 0 15px 40px rgba(239, 68, 68, 0.4);
+}
+
+.sos-countdown-container {
+  margin-bottom: 32px;
+}
+
+.sos-countdown {
+  font-size: 80px;
+  font-weight: 700;
+  color: #EF4444;
+  margin: 16px 0;
+}
+
+.sos-countdown-container h3 {
+  font-size: 24px;
+  color: var(--text-primary);
+}
+
+.info-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.info-list .info-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 14px;
+  color: var(--text-secondary);
+}

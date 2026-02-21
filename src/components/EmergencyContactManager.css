@@ -1,0 +1,270 @@
+.emergency-contacts-section {
+  margin-bottom: 24px;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.section-header h3 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  font-size: 18px;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  background: #F9FAFB;
+  border-radius: 12px;
+  color: #6B7280;
+  text-align: center;
+}
+
+.empty-state svg {
+  margin-bottom: 16px;
+  color: #9CA3AF;
+}
+
+.empty-state p {
+  margin: 4px 0;
+}
+
+.contacts-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.contact-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  background: white;
+  border: 1px solid #E5E7EB;
+  border-radius: 12px;
+  transition: all 0.2s;
+}
+
+.contact-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.contact-priority {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+  border-radius: 12px;
+  color: white;
+  font-weight: 700;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.priority-controls {
+  display: flex;
+  gap: 2px;
+  margin-top: 4px;
+}
+
+.priority-btn {
+  background: rgba(255, 255, 255, 0.3);
+  border: none;
+  color: white;
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.priority-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.priority-btn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.contact-info {
+  flex: 1;
+}
+
+.contact-name {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  font-size: 16px;
+  margin-bottom: 4px;
+}
+
+.priority-label {
+  font-size: 12px;
+  font-weight: 500;
+  margin-left: 8px;
+}
+
+.contact-details {
+  display: flex;
+  gap: 16px;
+  color: #6B7280;
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+.contact-details span {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.contact-flags {
+  display: flex;
+  gap: 8px;
+}
+
+.flag {
+  display: inline-block;
+  padding: 2px 8px;
+  background: #DBEAFE;
+  color: #1D4ED8;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.contact-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.icon-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background: #F3F4F6;
+  border: none;
+  border-radius: 8px;
+  color: #6B7280;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.icon-btn:hover {
+  background: #E5E7EB;
+  color: #374151;
+}
+
+.icon-btn.danger:hover {
+  background: #FEE2E2;
+  color: #DC2626;
+}
+
+.contact-form-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.contact-form {
+  background: white;
+  border-radius: 16px;
+  padding: 24px;
+  width: 90%;
+  max-width: 450px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.form-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.form-header h4 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  color: #6B7280;
+  cursor: pointer;
+  padding: 4px;
+}
+
+.close-btn:hover {
+  color: #374151;
+}
+
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 500;
+  font-size: 14px;
+  color: #374151;
+}
+
+.form-group input[type="text"],
+.form-group input[type="tel"],
+.form-group select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #D1D5DB;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.form-group.checkbox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.form-group.checkbox input {
+  width: 18px;
+  height: 18px;
+}
+
+.form-group.checkbox label {
+  margin: 0;
+}
+
+.form-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+}

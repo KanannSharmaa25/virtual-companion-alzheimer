@@ -1,0 +1,120 @@
+.map-view-large {
+  height: 350px;
+  background: linear-gradient(135deg, #D1FAE5, #DBEAFE);
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.map-view-large p {
+  font-size: 20px;
+  color: #10B981;
+  font-weight: 600;
+  margin-top: 16px;
+}
+
+.map-view-large span {
+  font-size: 13px;
+  color: #64748B;
+  margin-top: 4px;
+}
+
+.distance-display {
+  text-align: center;
+  padding: 24px 0;
+}
+
+.distance-circle {
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+}
+
+.distance-inner {
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  background: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.distance-value {
+  font-size: 40px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.distance-unit {
+  font-size: 16px;
+  color: var(--text-secondary);
+}
+
+.distance-display p {
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.distance-slider-section {
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+}
+
+.distance-slider-section label {
+  display: block;
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+}
+
+.distance-slider-section .slider {
+  width: 100%;
+  height: 8px;
+  -webkit-appearance: none;
+  background: #E2E8F0;
+  border-radius: 4px;
+  outline: none;
+}
+
+.distance-slider-section .slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #10B981, #3B82F6);
+  cursor: pointer;
+}
+
+.history-links {
+  display: flex;
+  gap: 16px;
+}
+
+.history-link {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 20px;
+  background: var(--bg-primary);
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text-primary);
+  transition: all 0.2s ease;
+}
+
+.history-link:hover {
+  background: var(--border);
+}
+
+.stat-icon.red { background: #FEE2E2; color: #EF4444; }

@@ -1,0 +1,110 @@
+.page-container {
+  max-width: 1000px;
+}
+
+.patient-info-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px;
+  background: var(--bg-primary);
+  border-radius: 12px;
+  margin-bottom: 20px;
+}
+
+.patient-avatar-large {
+  width: 64px;
+  height: 64px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #3B82F6, #8B5CF6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.status-details {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.status-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.quick-actions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.quick-action-btn {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  background: var(--bg-primary);
+  border-radius: 12px;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  color: inherit;
+}
+
+.quick-action-btn:hover {
+  transform: translateX(4px);
+  background: var(--border);
+}
+
+.action-icon-small {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.action-icon-small.blue { background: #DBEAFE; color: #3B82F6; }
+.action-icon-small.green { background: #D1FAE5; color: #10B981; }
+.action-icon-small.purple { background: #EDE9FE; color: #8B5CF6; }
+.action-icon-small.orange { background: #FEF3C7; color: #F59E0B; }
+
+.quick-action-btn span {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.alerts-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.alert-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: var(--bg-primary);
+  border-radius: 8px;
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.alert-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.alert-dot.green { background: #10B981; }
+.alert-dot.yellow { background: #F59E0B; }
+.alert-dot.red { background: #EF4444; }
