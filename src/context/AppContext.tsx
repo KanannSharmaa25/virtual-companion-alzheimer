@@ -301,7 +301,7 @@ interface DataContextType {
   addCognitiveResult: (result: Omit<CognitiveResult, 'id' | 'completedAt'>) => void;
 
   moodAnalysis: MoodAnalysis | null;
-  analyzeWellness: () => void;
+  analyzeWellness: () => MoodAnalysis | null;
   wellnessChecks: WellnessCheck[];
   addWellnessCheck: (check: Omit<WellnessCheck, 'id' | 'timestamp'>) => void;
 

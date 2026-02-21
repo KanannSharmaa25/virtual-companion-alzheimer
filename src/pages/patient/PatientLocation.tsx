@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { MapPin, Lock, AlertCircle, CheckCircle } from 'lucide-react';
-import { useData, useUser } from '../../context/AppContext';
+import { useData } from '../../context/AppContext';
 import { PasswordModal } from '../../components/PasswordModal';
 import './PatientHome.css';
 

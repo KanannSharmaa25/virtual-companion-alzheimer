@@ -37,7 +37,6 @@ export const PatientWellness: React.FC = () => {
   const [showSupport, setShowSupport] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputMessage, setInputMessage] = useState('');
-  const [isSpeaking, setIsSpeaking] = useState(false);
   const [showChat, setShowChat] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -46,13 +45,13 @@ export const PatientWellness: React.FC = () => {
       const analysis = analyzeWellness();
       setIsAnalyzing(false);
       
-      if (analysis && typeof analysis === 'object') {
-        const anyAnalysis = analysis as Record<string, unknown>;
+      if (analysis) {
+        const anyAnalysis = analysis as { flags?: Record<string, boolean> };
         const hasIssues = anyAnalysis.flags && (
-          (anyAnalysis.flags as Record<string, boolean>).stress || 
-          (anyAnalysis.flags as Record<string, boolean>).sadness || 
-          (anyAnalysis.flags as Record<string, boolean>).loneliness || 
-          (anyAnalysis.flags as Record<string, boolean>).confusion
+          anyAnalysis.flags.stress || 
+          anyAnalysis.flags.sadness || 
+          anyAnalysis.flags.loneliness || 
+          anyAnalysis.flags.confusion
         );
         setShowSupport(!!hasIssues);
         startConversation(analysis);
@@ -180,8 +179,6 @@ export const PatientWellness: React.FC = () => {
       const utterance = new SpeechSynthesisUtterance(text);
       utterance.rate = 0.85;
       utterance.pitch = 1;
-      utterance.onstart = () => setIsSpeaking(true);
-      utterance.onend = () => setIsSpeaking(false);
       speechSynthesis.speak(utterance);
     }
   };
