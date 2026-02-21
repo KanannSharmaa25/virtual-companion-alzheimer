@@ -8,6 +8,8 @@ interface Exercise {
   type: string;
   name: string;
   description: string;
+  icon?: React.ReactNode;
+  color?: string;
 }
 
 interface Question {
@@ -16,9 +18,6 @@ interface Question {
   correctAnswer: string;
   image?: string;
   options?: string[];
-}
-  icon: React.ReactNode;
-  color: string;
 }
 
 interface Card {
