@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { Heart, MessageCircle, Users, Music, BookOpen, Brain, Activity, Sun, Moon, Star, Send, Volume2, RefreshCw } from 'lucide-react';
 import { useData } from '../../context/AppContext';
@@ -40,6 +40,39 @@ export const PatientWellness: React.FC = () => {
   const [showChat, setShowChat] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
+  const getGreetingMessage = useCallback((analysis: typeof moodAnalysis) => {
+    if (!analysis) return "Hello! I'm your wellness companion. How are you feeling today?";
+
+    switch (analysis.overallMood) {
+      case 'lonely':
+        return "Hello! I can see you might be feeling a bit lonely. I'm here for you. Would you like to chat, or perhaps we could call one of your family members?";
+      case 'sad':
+        return "Hello, friend. I'm here with you. Sometimes it helps to talk about what's on your mind. I'm listening.";
+      case 'anxious':
+        return "Hello! I notice you might be feeling worried. Let's take it slow. Deep breath in... and out. I'm here whenever you're ready to talk.";
+      case 'confused':
+        return "Hello! Don't worry - I'm here to help. Sometimes everything can feel overwhelming. Let's work through it together.";
+      case 'happy':
+        return "Hello! It's so wonderful to see you! You seem to be feeling good today. I'd love to hear what's making you happy!";
+      case 'content':
+        return "Hello! I hope you're having a good day. I'm here if you'd like to chat or need anything.";
+      default:
+        return "Hello, friend! I'm always here for you. How are you feeling right now?";
+    }
+  }, []);
+
+  const startConversation = useCallback((analysis: typeof moodAnalysis) => {
+    if (!analysis) return;
+
+    const greeting = getGreetingMessage(analysis);
+    setMessages([{
+      id: '1',
+      sender: 'ai',
+      content: greeting,
+      timestamp: Date.now(),
+    }]);
+  }, [getGreetingMessage]);
+
   useEffect(() => {
     const timer = setTimeout(() => {
       const analysis = analyzeWellness();
@@ -59,45 +92,12 @@ export const PatientWellness: React.FC = () => {
     }, 1500);
 
     return () => clearTimeout(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
-
-  const startConversation = (analysis: typeof moodAnalysis) => {
-    if (!analysis) return;
-
-    const greeting = getGreetingMessage(analysis);
-    setMessages([{
-      id: '1',
-      sender: 'ai',
-      content: greeting,
-      timestamp: Date.now(),
-    }]);
-  };
-
-  const getGreetingMessage = (analysis: typeof moodAnalysis) => {
-    if (!analysis) return "Hello! I'm your wellness companion. How are you feeling today?";
-
-    switch (analysis.overallMood) {
-      case 'lonely':
-        return "Hello! I can see you might be feeling a bit lonely. I'm here for you. Would you like to chat, or perhaps we could call one of your family members?";
-      case 'sad':
-        return "Hello, friend. I'm here with you. Sometimes it helps to talk about what's on your mind. I'm listening.";
-      case 'anxious':
-        return "Hello! I notice you might be feeling worried. Let's take it slow. Deep breath in... and out. I'm here whenever you're ready to talk.";
-      case 'confused':
-        return "Hello! Don't worry - I'm here to help. Sometimes everything can feel overwhelming. Let's work through it together.";
-      case 'happy':
-        return "Hello! It's so wonderful to see you! You seem to be feeling good today. I'd love to hear what's making you happy!";
-      case 'content':
-        return "Hello! I hope you're having a good day. I'm here if you'd like to chat or need anything.";
-      default:
-        return "Hello, friend! I'm always here for you. How are you feeling right now?";
-    }
-  };
-
   const handleSendMessage = () => {
     if (!inputMessage.trim()) return;
 

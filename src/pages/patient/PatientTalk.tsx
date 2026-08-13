@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { Mic, Send, Heart, Volume2, Sparkles, Music, Image, Calendar, Brain, BookOpen, Copy, Check } from 'lucide-react';
+import { Mic, Send, Heart, Volume2, VolumeX, Sparkles, Music, Image, Calendar, Brain, BookOpen, Copy, Check } from 'lucide-react';
 import { useData } from '../../context/AppContext';
 import './Talk.css';
 
@@ -525,8 +525,10 @@ export const PatientTalk: React.FC = () => {
   const [inputText, setInputText] = useState('');
   const [isListening, setIsListening] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
+  const [isMuted, setIsMuted] = useState(false);
   const [copiedId, setCopiedId] = useState(false);
   const [patientId, setPatientId] = useState('');
+  const [isPageActive, setIsPageActive] = useState(true);
   const [context, setContext] = useState<ConversationContext>({
     lastTopic: null,
     userMood: 'neutral',
@@ -537,6 +539,42 @@ export const PatientTalk: React.FC = () => {
   
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const speechSynthesisRef = useRef<SpeechSynthesisUtterance | null>(null);
+  const pageRef = useRef<HTMLDivElement>(null);
+
+  // Track page visibility
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      const isVisible = document.visibilityState === 'visible';
+      setIsPageActive(isVisible);
+      
+      if (!isVisible) {
+        stopSpeaking();
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    
+    // Also track if the page element is in the DOM
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsPageActive(entry.isIntersecting);
+        if (!entry.isIntersecting) {
+          stopSpeaking();
+        }
+      },
+      { threshold: 0.5 }
+    );
+
+    if (pageRef.current) {
+      observer.observe(pageRef.current);
+    }
+
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      observer.disconnect();
+      stopSpeaking();
+    };
+  }, []);
 
   useEffect(() => {
     let id = localStorage.getItem('patientId');
@@ -558,6 +596,12 @@ export const PatientTalk: React.FC = () => {
     } else {
       patientData[id].lastActive = Date.now();
       localStorage.setItem('patientRegistry', JSON.stringify(patientData));
+    }
+
+    // Load mute preference
+    const mutePref = localStorage.getItem('aiCompanionMuted');
+    if (mutePref === 'true') {
+      setIsMuted(true);
     }
   }, []);
 
@@ -581,7 +625,9 @@ export const PatientTalk: React.FC = () => {
     };
     
     setMessages([initialMessage]);
-    setTimeout(() => speakMessage(initialMessage.text, true), 500);
+    if (!isMuted) {
+      setTimeout(() => speakMessage(initialMessage.text, true), 500);
+    }
   }, []);
 
   useEffect(() => {
@@ -594,6 +640,12 @@ export const PatientTalk: React.FC = () => {
   }, []);
 
   const speakMessage = useCallback((text: string, isGreeting = false) => {
+    // Only speak if page is active and not muted
+    if (!isPageActive || isMuted) {
+      setIsSpeaking(false);
+      return;
+    }
+
     speechSynthesis.cancel();
     setIsSpeaking(true);
 
@@ -612,12 +664,23 @@ export const PatientTalk: React.FC = () => {
     
     speechSynthesisRef.current = utterance;
     speechSynthesis.speak(utterance);
-  }, [getVoices]);
+  }, [getVoices, isPageActive, isMuted]);
 
   const stopSpeaking = useCallback(() => {
     speechSynthesis.cancel();
     setIsSpeaking(false);
   }, []);
+
+  const toggleMute = useCallback(() => {
+    setIsMuted(prev => {
+      const newMuted = !prev;
+      localStorage.setItem('aiCompanionMuted', String(newMuted));
+      if (newMuted) {
+        stopSpeaking();
+      }
+      return newMuted;
+    });
+  }, [stopSpeaking]);
 
   const generateResponse = useCallback((userText: string): string => {
     const category = categorizeMessage(userText);
@@ -819,43 +882,78 @@ export const PatientTalk: React.FC = () => {
   };
 
   return (
-    <div className="page-container">
+    <div className="page-container" ref={pageRef}>
       <div className="page-header">
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', width: '100%' }}>
           <div>
             <h1>AI Companion</h1>
             <p>I'm here to keep you company</p>
           </div>
-          {patientId && (
-            <div style={{ 
-              background: '#EFF6FF', 
-              padding: '8px 12px', 
-              borderRadius: '8px',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '8px',
-              border: '1px solid #BFDBFE'
-            }}>
-              <span style={{ fontSize: '12px', color: '#64748B' }}>Your ID:</span>
-              <span style={{ fontWeight: '700', color: '#3B82F6', fontSize: '16px', letterSpacing: '1px' }}>{patientId}</span>
-              <button 
-                onClick={handleCopyId}
-                style={{
-                  background: 'none',
-                  border: 'none',
-                  cursor: 'pointer',
-                  padding: '4px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  color: copiedId ? '#10B981' : '#64748B',
-                }}
-                title="Copy ID"
-              >
-                {copiedId ? <Check size={16} /> : <Copy size={16} />}
-              </button>
-            </div>
-          )}
+          <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+            {patientId && (
+              <div style={{ 
+                background: '#EFF6FF', 
+                padding: '8px 12px', 
+                borderRadius: '8px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                border: '1px solid #BFDBFE'
+              }}>
+                <span style={{ fontSize: '12px', color: '#64748B' }}>Your ID:</span>
+                <span style={{ fontWeight: '700', color: '#3B82F6', fontSize: '16px', letterSpacing: '1px' }}>{patientId}</span>
+                <button 
+                  onClick={handleCopyId}
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    cursor: 'pointer',
+                    padding: '4px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    color: copiedId ? '#10B981' : '#64748B',
+                  }}
+                  title="Copy ID"
+                >
+                  {copiedId ? <Check size={16} /> : <Copy size={16} />}
+                </button>
+              </div>
+            )}
+            <button
+              onClick={toggleMute}
+              style={{
+                background: isMuted ? '#FEE2E2' : '#D1FAE5',
+                border: 'none',
+                borderRadius: '8px',
+                padding: '10px',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                transition: 'all 0.2s',
+              }}
+              title={isMuted ? "Unmute AI Voice" : "Mute AI Voice"}
+            >
+              {isMuted ? <VolumeX size={20} color="#DC2626" /> : <Volume2 size={20} color="#059669" />}
+            </button>
+          </div>
         </div>
+        {isMuted && (
+          <div style={{
+            marginTop: '12px',
+            padding: '8px 12px',
+            background: '#FEF3C7',
+            borderRadius: '8px',
+            fontSize: '13px',
+            color: '#92400E',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+          }}>
+            <VolumeX size={16} />
+            AI voice is muted. Click the speaker icon to unmute.
+          </div>
+        )}
       </div>
 
       <div className="chat-container">

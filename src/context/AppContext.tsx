@@ -13,15 +13,23 @@ const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: numbe
   return R * c;
 };
 
+export interface LinkedCaregiver {
+  id: string;
+  name: string;
+  relation: string;
+  linkedAt: number;
+}
+
 interface UserContextType {
   user: User | null;
   setUser: (user: User | null) => void;
   logout: () => void;
   login: (email: string, password: string) => boolean;
   register: (email: string, password: string, name: string, role: 'patient' | 'caregiver') => boolean;
-  verifyCaregiverPassword: (password: string) => boolean;
+  verifyCaregiverPassword: (password: string, caregiverId?: string) => boolean;
   updateCaregiverPassword: (password: string) => void;
   updateProfileCompleted: (completed: boolean) => void;
+  registerCaregiverId: (id: string) => void;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -89,8 +97,23 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     return true;
   };
 
-  const verifyCaregiverPassword = (password: string): boolean => {
+  const verifyCaregiverPassword = (password: string, caregiverId?: string): boolean => {
+    if (caregiverId) {
+      const registry = JSON.parse(localStorage.getItem('caregiverRegistry') || '{}');
+      const entry = registry[caregiverId.toUpperCase()];
+      return entry && entry.password === password;
+    }
     return password === caregiverPassword;
+  };
+
+  const registerCaregiverId = (id: string) => {
+    const registry = JSON.parse(localStorage.getItem('caregiverRegistry') || '{}');
+    registry[id.toUpperCase()] = {
+      password: caregiverPassword,
+      linked: false,
+      linkedPatientId: null,
+    };
+    localStorage.setItem('caregiverRegistry', JSON.stringify(registry));
   };
 
   const updateCaregiverPassword = (password: string) => {
@@ -126,7 +149,8 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       register,
       verifyCaregiverPassword,
       updateCaregiverPassword,
-      updateProfileCompleted
+      updateProfileCompleted,
+      registerCaregiverId,
     }}>
       {children}
     </UserContext.Provider>
@@ -240,6 +264,8 @@ interface DataContextType {
   
   linkedPatient: LinkedPatient | null;
   setLinkedPatient: (patient: LinkedPatient | null) => void;
+  linkedCaregiver: LinkedCaregiver | null;
+  setLinkedCaregiver: (caregiver: LinkedCaregiver | null) => void;
   
   patientLocation: { lat: number; lng: number; timestamp: number } | null;
   setPatientLocation: (location: { lat: number; lng: number; timestamp: number } | null) => void;
@@ -329,6 +355,7 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [safeZones, setSafeZones] = useState<SafeZone[]>([]);
   const [distanceAlert, setDistanceAlert] = useState<DistanceAlert>({ maxDistance: 5, enabled: false });
   const [linkedPatient, setLinkedPatient] = useState<LinkedPatient | null>(null);
+  const [linkedCaregiver, setLinkedCaregiver] = useState<LinkedCaregiver | null>(null);
   const [patientLocation, setPatientLocation] = useState<{ lat: number; lng: number; timestamp: number } | null>(null);
   const [caregiverLocation, setCaregiverLocation] = useState<{ lat: number; lng: number; timestamp: number } | null>(null);
   const [patientBattery, setPatientBatteryState] = useState<BatteryInfo>({ level: 100, isCharging: false, lastUpdate: Date.now() });
@@ -384,6 +411,7 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       setDistanceAlert(data.distanceAlert || { maxDistance: 5, enabled: false });
       setCaregiverLocation(data.caregiverLocation || null);
       setLinkedPatient(data.linkedPatient || null);
+      setLinkedCaregiver(data.linkedCaregiver || null);
       setLocationSharing(data.locationSharing !== false);
       setMovementData(data.movementData || { steps: 0, lastMovement: Date.now(), status: 'active' });
       setFallAlerts(data.fallAlerts || []);
@@ -427,39 +455,73 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   }, []);
 
   const saveData = () => {
-    localStorage.setItem('appData', JSON.stringify({
-      familyMembers,
-      reminders,
-      reminderLogs,
-      safeZones,
-      distanceAlert,
-      caregiverLocation,
-      linkedPatient,
-      locationSharing,
-      movementData,
-      fallAlerts,
-      weeklyReport,
-      patientProfile,
-      caregiverProfile,
-      voiceMessages,
-      videoMessages,
-      photos,
-      chatMessages,
-      notifications,
-      musicTracks,
-      musicMemories,
-      journalEntries,
-      cognitiveResults,
-      moodAnalysis,
-      wellnessChecks,
-      emergencySettings,
-      emergencyAlerts,
-    }));
+    try {
+      // Strip large binary data to reduce storage size
+      const journalEntriesWithoutAudio = journalEntries.map(entry => {
+        const { audioData, ...rest } = entry;
+        return rest;
+      });
+      
+      const voiceMessagesWithoutAudio = voiceMessages.map(msg => {
+        const { audioData, ...rest } = msg;
+        return rest;
+      });
+      
+      const videoMessagesWithoutVideo = videoMessages.map(msg => {
+        const { videoData, ...rest } = msg;
+        return rest;
+      });
+      
+      const photosWithoutImages = photos.map(photo => {
+        const { imageData, ...rest } = photo;
+        return rest;
+      });
+      
+      const musicTracksWithoutAudio = musicTracks.map(track => {
+        const { audioData, ...rest } = track;
+        return rest;
+      });
+      
+      const data = JSON.stringify({
+        familyMembers,
+        reminders,
+        reminderLogs,
+        safeZones,
+        distanceAlert,
+        caregiverLocation,
+        linkedPatient,
+        linkedCaregiver,
+        locationSharing,
+        movementData,
+        fallAlerts,
+        weeklyReport,
+        patientProfile,
+        caregiverProfile,
+        voiceMessages: voiceMessagesWithoutAudio,
+        videoMessages: videoMessagesWithoutVideo,
+        photos: photosWithoutImages,
+        chatMessages,
+        notifications,
+        musicTracks: musicTracksWithoutAudio,
+        musicMemories,
+        journalEntries: journalEntriesWithoutAudio,
+        cognitiveResults,
+        moodAnalysis,
+        wellnessChecks,
+        emergencySettings,
+        emergencyAlerts,
+      });
+      console.log('Saving data size:', (data.length / 1024 / 1024).toFixed(2), 'MB');
+      localStorage.setItem('appData', data);
+    } catch (error) {
+      console.error('Error saving data to localStorage:', error);
+      alert('Storage is full. Please clear some data and try again.');
+    }
   };
 
   useEffect(() => {
     saveData();
-  }, [familyMembers, reminders, reminderLogs, safeZones, distanceAlert, caregiverLocation, linkedPatient, locationSharing, movementData, fallAlerts, weeklyReport, patientProfile, caregiverProfile, voiceMessages, videoMessages, photos, chatMessages, notifications, musicTracks, musicMemories, journalEntries, cognitiveResults, moodAnalysis, wellnessChecks, emergencySettings, emergencyAlerts]);
+  }, [familyMembers, reminders, reminderLogs, safeZones, distanceAlert, caregiverLocation, linkedPatient, linkedCaregiver, locationSharing, movementData, fallAlerts, weeklyReport, patientProfile, caregiverProfile, voiceMessages, videoMessages, photos, chatMessages, notifications, musicTracks, musicMemories, journalEntries, cognitiveResults, moodAnalysis, wellnessChecks, emergencySettings, emergencyAlerts]);
 
   const addFamilyMember = (member: Omit<FamilyMember, 'id'>) => {
     setFamilyMembers(prev => [...prev, { ...member, id: Date.now().toString() }]);
@@ -526,6 +588,7 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   };
 
   const addVoiceMessage = (message: Omit<VoiceMessage, 'id' | 'timestamp' | 'played'>) => {
+    console.log('Adding voice message:', message);
     setVoiceMessages(prev => [...prev, { 
       ...message, 
       id: Date.now().toString(), 
@@ -539,6 +602,7 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   };
 
   const addVideoMessage = (message: Omit<VideoMessage, 'id' | 'timestamp' | 'played'>) => {
+    console.log('Adding video message:', message);
     setVideoMessages(prev => [...prev, { 
       ...message, 
       id: Date.now().toString(), 
@@ -552,7 +616,12 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   };
 
   const addPhoto = (photo: Omit<Photo, 'id' | 'timestamp'>) => {
-    setPhotos(prev => [...prev, { ...photo, id: Date.now().toString(), timestamp: Date.now() }]);
+    console.log('Adding photo:', photo);
+    setPhotos(prev => {
+      const newPhotos = [...prev, { ...photo, id: Date.now().toString(), timestamp: Date.now() }];
+      console.log('Photos after add:', newPhotos.length);
+      return newPhotos;
+    });
   };
 
   const addChatMessage = (message: Omit<ChatMessage, 'id' | 'timestamp' | 'read'>) => {
@@ -1036,6 +1105,8 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       setCaregiverLocation,
       linkedPatient,
       setLinkedPatient,
+      linkedCaregiver,
+      setLinkedCaregiver,
       patientLocation,
       setPatientLocation,
       patientBattery,
